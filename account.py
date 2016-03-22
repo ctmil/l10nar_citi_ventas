@@ -26,16 +26,28 @@ class account_period(models.Model):
                                 if document_afip_code == '99':
                                         #                  12345678901234567890
                                         document_number = '00000000000000000000'
-				customer = invoice.partner_id.name.ljust(30).encode('utf-8')
+				#customer = invoice.partner_id.name.ljust(30).encode('utf-8')
+				customer = invoice.partner_id.name.encode('utf-8')
 				if len(customer) > 30:
 					customer = customer[:30]
+				customer = '{:<30}'.format(customer)
+				if len(customer.decode('utf-8')) < 30:
+					cantidad = 30 - len(customer.decode('utf-8'))
+					filler = ''
+					for index in range(cantidad):
+						filler = filler + ' '
+					customer = customer + filler
+				#if len(customer) > 30:
+				#	customer = customer[:30]
+				#if len(customer) < 30:
+				#	customer = customer.ljust(30)
 				# amount_untaxed = str(int(invoice.amount_untaxed * 100 )).encode('utf-8').zfill(15)
 				amount_untaxed = str(int(invoice.amount_total * 100 )).encode('utf-8').zfill(15)
 				column_10 = '0'.encode('utf-8').zfill(15)
 				column_11 = '0'.encode('utf-8').zfill(15)
-				column_12 = '0'.encode('utf-8').zfill(15)
+				column_12 = str(int(invoice.monto_neto *100)).encode('utf-8').zfill(15)
 				column_13 = '0'.encode('utf-8').zfill(15)
-				column_14 = '0'.encode('utf-8').zfill(15)
+				column_14 = str(int(invoice.monto_otros_impuestos*100)).encode('utf-8').zfill(15)
 				column_15 = '0'.encode('utf-8').zfill(15)
 				# amount_tax = str(int(invoice.amount_tax*100)).encode('utf-8').zfill(15)
 				amount_tax = str(int(0)).encode('utf-8').zfill(15)
